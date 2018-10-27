@@ -76,14 +76,15 @@ public class RavensProject {
         }
 
         Agent agent = new Agent();
-
+/*
+        agent.Solve(sets.get(0).getProblems().get(11));
+*/
         for(ProblemSet set : sets) {
             for(RavensProblem problem : set.getProblems()) {            // Your agent will solve one problem at a time.
                 int answer = agent.Solve(problem);                     // The problem will be passed to your agent as a RavensProblem object as a parameter to the Solve method
                 answers.println(set.getName() + "," + problem.getName() + "," + answer);
             }
         }
-
         r.close();
         answers.close();
     }
