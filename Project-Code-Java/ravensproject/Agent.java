@@ -84,44 +84,8 @@ public class Agent {
     RavensFigure figureH = problem.getFigures().get("H");
     RavensFigure figure4 = problem.getFigures().get("2");
 
-    double iprHorizontal = getIPR(figureG, figureH);
-    Map<Double, RavensFigure> answerIprHorizontal = findAnswerByIprRatio(figureH,iprHorizontal,
-        problem.getFigures());
-    double iprVertical = getIPR(figureG, figureH);
-    Map<Double, RavensFigure> answerIprVertical = findAnswerByIprRatio(figureH,iprVertical,
-        problem.getFigures());
-
-    double iprDiagonal = getIPR(figureG, figureH);
-    Map<Double, RavensFigure> answerIprDiagonal = findAnswerByIprRatio(figureH,iprDiagonal,
-        problem.getFigures());
-    Map<String, Integer> answerNamesByCount = new HashMap<>();
-
-    if(!answerIprDiagonal.isEmpty()){
-    String nameDiagonalAnswer =
-        ((RavensFigure)((Map.Entry)answerIprDiagonal.entrySet().toArray()[0]).getValue()).getName();
-      answerNamesByCount.put(nameDiagonalAnswer, 1);
-    }
-    if(!answerIprVertical.isEmpty()) {
-
-      String nameVerticalAnswer =
-          ((RavensFigure) ((Map.Entry) answerIprVertical.entrySet().toArray()[0]).getValue())
-              .getName();
-      if(answerNamesByCount.get(nameVerticalAnswer)!=null){
-        answerNamesByCount.put(nameVerticalAnswer,answerNamesByCount.get(nameVerticalAnswer)+1);
-      }
-    }
-    if(!answerIprHorizontal.isEmpty()) {
-
-      String nameHorizontalAnswer =
-          ((RavensFigure) ((Map.Entry) answerIprHorizontal.entrySet().toArray()[0]).getValue())
-              .getName();
-      if(answerNamesByCount.get(nameHorizontalAnswer)!=null){
-        answerNamesByCount.put(nameHorizontalAnswer,answerNamesByCount.get(nameHorizontalAnswer)+1);
-      }
-
-    }
-
-
+  //  double ipr = getIPR(figureD, figureF);
+   // findAnswerByIprRatio(figureG,ipr, problem.getFigures());
   //  double figureBDpr = getDPR(figureB);
    // double figureCDpr = getDPR(figureC);
      /* double dprRatioDiagonal = getDPR(figureA)/getDPR(figureE);
@@ -144,23 +108,6 @@ public class Agent {
     double horizontalSimilarity = (double)answersHorizontal.keySet().toArray()[0];
     double verticalSimilarity = (double)answersVertical.keySet().toArray()[0];
 
-    List<RavensFigure>  dprAnswers = answersHorizontal.get(horizontalSimilarity);
-    dprAnswers.addAll(answersVertical.get(verticalSimilarity));
-    dprAnswers.addAll(answersDiagonal.get(diagonalSimilarity));
-    for(RavensFigure dprAnswer: dprAnswers){
-      String name = dprAnswer.getName();
-      if(answerNamesByCount.get(name)!=null){
-        answerNamesByCount.put(name,answerNamesByCount.get(name)+1);
-      }
-      else{
-        answerNamesByCount.put(name,1);
-      }
-    }
-    String maxName =
-        answerNamesByCount.entrySet().stream().max(Map.Entry.comparingByValue()).get().getKey();
-if(answerNamesByCount.get(maxName) > 1){
-  return Integer.parseInt(maxName);
-}
     if(diagonalSimilarity<=horizontalSimilarity&&diagonalSimilarity<=verticalSimilarity){
       answers = answersDiagonal.get(diagonalSimilarity);
     }
@@ -202,7 +149,7 @@ if(answerNamesByCount.get(maxName) > 1){
       else{
         //todo
       }
-
+        
     }*/
 
      /* double dprRatioVertical = getDPR(figureD)/getDPR(figureG);
@@ -375,8 +322,7 @@ if(answerNamesByCount.get(maxName) > 1){
     int possibleAnswer = 1;
     for (int i = 2; i <= 8; i++) {
       RavensFigure figureToAnalyse = figures.get(Integer.toString(i));
-      double delete = figureHdpr / getDPR(figureToAnalyse);
-      double similarity = dprRatioHorizontal - (figureHdpr / getDPR(figureToAnalyse));
+      double similarity = dprRatioHorizontal - figureHdpr / getDPR(figureToAnalyse);
       similarity = Math.abs(similarity);
       System.out.println("similarity" + similarity);
       if (Math.abs(similarity) < similarityToCompare) {
@@ -486,8 +432,7 @@ if(answerNamesByCount.get(maxName) > 1){
         }
       }
     }
-
-    return  dark / total;
+    return dark / total;
   }
 
   /*  private List<Double> getSimilarity(RavensFigure figure1,RavensFigure figure2) {
@@ -533,17 +478,16 @@ if(answerNamesByCount.get(maxName) > 1){
     return common / total;
   }
 
-  private Map<Double, RavensFigure> findAnswerByIprRatio(RavensFigure figureH, double iprRatio,
+  private int findAnswerByIprRatio(RavensFigure figureH, double iprRatio,
       HashMap<String, RavensFigure> figures) {
     double similarityToCompare = Math.abs(iprRatio - getIPR(figureH, figures.get("1")));
-    Map<Double, RavensFigure> answerMap = new HashMap<>();
     int possibleAnswer = -1;
     for (int i = 2; i <= 8; i++) {
       RavensFigure figureToAnalyse = figures.get(Integer.toString(i));
       double iprTemp = getIPR(figureH, figureToAnalyse);
       double similarity = Math.abs(iprRatio - iprTemp);
       System.out.println("similarity" + similarity);
-      if (Math.abs(similarity) > similarityToCompare) {
+      if (Math.abs(similarity) < similarityToCompare) {
         similarityToCompare = similarity;
         possibleAnswer = i;
       }
@@ -552,9 +496,7 @@ if(answerNamesByCount.get(maxName) > 1){
         possibleAnswer = i;
       }*/
     }
-    if(possibleAnswer != -1)
-      answerMap.put(similarityToCompare, figures.get(Integer.toString(possibleAnswer)));
-    return answerMap;
+    return possibleAnswer;
   }
 
   private int findAnswerByIprRatio(RavensFigure figureH, double iprRatio,
